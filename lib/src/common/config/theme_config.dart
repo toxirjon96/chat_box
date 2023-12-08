@@ -1,5 +1,6 @@
-import 'package:chat_box/src/common/style/app_colors.dart';
 import 'package:flutter/material.dart';
+
+import '../style/app_colors.dart';
 
 final ColorScheme kColorSchema =
     ColorScheme.fromSeed(seedColor: AppColors.mainColor);
@@ -7,9 +8,10 @@ final ColorScheme kColorSchema =
 class ThemeConfig {
   const ThemeConfig._();
 
-  static ThemeData theme = ThemeData(fontFamily: "Poppins").copyWith(
+  static ThemeData theme = ThemeData(
+    fontFamily: "Poppins",
     useMaterial3: true,
+  ).copyWith(
     colorScheme: kColorSchema,
   );
-
 }

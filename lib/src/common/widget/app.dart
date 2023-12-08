@@ -1,6 +1,7 @@
-import 'package:chat_box/src/common/config/theme_config.dart';
-import 'package:chat_box/src/features/home_page/home_page.dart';
 import 'package:flutter/material.dart';
+
+import '../config/theme_config.dart';
+import '../../features/pages/home_page/home_page.dart';
 
 class App extends StatelessWidget{
   const App({super.key});

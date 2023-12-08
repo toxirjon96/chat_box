@@ -12,7 +12,16 @@
           "package_name": "uz.infinity.chat_box"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "243376022885-3bdvbfet8ma9le7tfn3r9bfblt8nmcqh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.infinity.chat_box",
+            "certificate_hash": "89773cf61861bce387db1023a2cbc67ba55ce8b4"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDBhZmhgVpCXeaP2MV_6X7IhOtusHXkm4c"

@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '243376022885',
     projectId: 'chat-app-b04ab',
     storageBucket: 'chat-app-b04ab.appspot.com',
+    androidClientId: '243376022885-3bdvbfet8ma9le7tfn3r9bfblt8nmcqh.apps.googleusercontent.com',
     iosBundleId: 'uz.infinity.chatBox',
   );
 }
