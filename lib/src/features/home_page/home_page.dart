@@ -1,36 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/style/app_colors.dart';
 import '../../common/style/app_insets.dart';
-
 import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  Future<void> signIn() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    await auth.verifyPhoneNumber(
-      phoneNumber: '+998946133644',
-      codeSent: (String verificationId, int? resendToken) async {
-        // Update the UI - wait for the user to enter the SMS code
-        String smsCode = 'xxxx';
-
-        // Create a PhoneAuthCredential with the code
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode);
-
-        // Sign the user in (or link) with the credential
-        await auth.signInWithCredential(credential);
-      },
-      verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
-      verificationFailed: (FirebaseAuthException error) {},
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
