@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import '../../../common/style/app_colors.dart';
 import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
 import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
-import '../main_page/main_page.dart';
+import 'widget/custom_button.dart';
+import 'widget/otp_screen.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -35,11 +35,7 @@ class _SignInPageState extends State<SignInPage> {
           print('\n' * 5);
 
           await auth.signInWithCredential(credential).then((value) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => const MainPage(),
-              ),
-            );
+            // context.router.push(const Main());
           });
         },
         verificationFailed: (FirebaseAuthException e) {
@@ -47,27 +43,17 @@ class _SignInPageState extends State<SignInPage> {
           print(e);
           print('\n' * 5);
         },
-        codeSent: (String verificationId, int? resendToken) async {
+        codeSent: (String verificationId, int? resendToken) {
           print('\n' * 5);
           print('codeSent');
           print('\n' * 5);
 
-          const smscode = '123123';
-
-          final credential = PhoneAuthProvider.credential(
-            verificationId: verificationId,
-            smsCode: smscode,
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpScreen(verificationId: verificationId),
+            ),
           );
-
-          auth.signInWithCredential(credential).then((result) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => const MainPage(),
-              ),
-            );
-          }).catchError((e) {
-            print(e);
-          });
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           print('\n' * 5);
@@ -106,7 +92,7 @@ class _SignInPageState extends State<SignInPage> {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'Log in to Chatbox',
+                  'Log in to ChatBox',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold),
@@ -192,36 +178,10 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppInsets.leftAndRightPadding,
-              ),
-              child: Container(
-                height: 60,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: const LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      AppColors.mainColor,
-                      AppColors.lightMainColor,
-                    ],
-                  ),
-                ),
-                child: SizedBox.expand(
-                  child: TextButton(
-                    onPressed: signIn,
-                    child: Text(
-                      'Sign in',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.background,
-                          ),
-                    ),
-                  ),
-                ),
-              ),
+            CustomButton(
+              horizontalPadding: AppInsets.leftAndRightPadding,
+              text: 'Sign in',
+              onPressed: signIn,
             ),
           ],
         ),
