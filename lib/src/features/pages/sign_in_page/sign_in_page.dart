@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../common/style/app_colors.dart';
+import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
 import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
@@ -134,19 +135,19 @@ class _SignInPageState extends State<SignInPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgContainer(
-                  svgPath: 'assets/icons/facebook.svg',
+                  svgPath: AppIcons.facebookSvg,
                   size: 60,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
                 const SizedBox(width: 20),
                 SvgContainer(
-                  svgPath: 'assets/icons/google.svg',
+                  svgPath: AppIcons.googleSvg,
                   size: 60,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
                 const SizedBox(width: 15),
                 SvgContainer(
-                  svgPath: 'assets/icons/apple-black.svg',
+                  svgPath: AppIcons.appleBlackSvg,
                   size: 60,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),

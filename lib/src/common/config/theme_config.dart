@@ -9,7 +9,7 @@ class ThemeConfig {
   const ThemeConfig._();
 
   static ThemeData theme = ThemeData(
-    fontFamily: "Poppins",
+    fontFamily: 'Poppins',
     useMaterial3: true,
   ).copyWith(
     colorScheme: kColorSchema,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../common/style/app_colors.dart';
+import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
 import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
@@ -58,17 +59,17 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgContainer(
-                  svgPath: 'assets/icons/facebook.svg',
+                  svgPath: AppIcons.facebookSvg,
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
                 const SizedBox(width: 20),
                 SvgContainer(
-                  svgPath: 'assets/icons/google.svg',
+                  svgPath: AppIcons.googleSvg,
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
                 const SizedBox(width: 15),
                 SvgContainer(
-                  svgPath: 'assets/icons/apple.svg',
+                  svgPath: AppIcons.appleSvg,
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
               ],
