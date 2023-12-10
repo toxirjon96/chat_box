@@ -20,9 +20,14 @@ class _SignInPageState extends State<SignInPage> {
   late final TextEditingController phoneController;
   final _formKey = GlobalKey<FormState>();
 
+  ValueNotifier<bool> loading = ValueNotifier(false);
+  ValueNotifier<bool> isError = ValueNotifier(false);
+  ValueNotifier<String> errorMessage = ValueNotifier('');
+
   Future<void> signIn() async {
     final isValidPhoneNumber = _formKey.currentState!.validate();
     if (isValidPhoneNumber) {
+      loading.value = true;
       final auth = FirebaseAuth.instance;
 
       await auth.verifyPhoneNumber(
@@ -39,17 +44,11 @@ class _SignInPageState extends State<SignInPage> {
           });
         },
         verificationFailed: (FirebaseAuthException e) {
-          print('\n' * 5);
-          print(e);
-          print('\n' * 5);
+          isError.value = true;
+          errorMessage.value = 'Authentication failed!';
         },
         codeSent: (String verificationId, int? resendToken) {
-          print('\n' * 5);
-          print('codeSent');
-          print('\n' * 5);
-
-          Navigator.push(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => OtpScreen(verificationId: verificationId),
             ),

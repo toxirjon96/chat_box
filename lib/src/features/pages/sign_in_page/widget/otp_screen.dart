@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../main_page/main_page.dart';
+import '../../../../common/style/app_insets.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
@@ -20,10 +20,6 @@ class _OtpScreenState extends State<OtpScreen> {
   String smsCode = '';
 
   void otpVerification() async {
-    print('\n' * 5);
-    print('otpVerification');
-    print('\n' * 5);
-
     final auth = FirebaseAuth.instance;
 
     final credential = PhoneAuthProvider.credential(
@@ -32,23 +28,12 @@ class _OtpScreenState extends State<OtpScreen> {
     );
     try {
       final result = await auth.signInWithCredential(credential);
-      print('\n' * 5);
-      print('signInWithCredential');
-      print(result);
-      print('\n' * 5);
 
       if (context.mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainPage(),
-          ),
-        );
+        Navigator.of(context).pop();
       }
     } catch (e) {
-      print('\n' * 5);
       print(e);
-      print('\n' * 5);
     }
   }
 
@@ -56,7 +41,9 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppInsets.leftAndRightPadding,
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -110,11 +97,8 @@ class _OtpScreenState extends State<OtpScreen> {
                 showCursor: true,
                 onCompleted: (pin) {
                   smsCode = pin;
+                  print(smsCode);
                 },
-              ),
-              FilledButton(
-                onPressed: otpVerification,
-                child: const Text('Verify SMS'),
               ),
             ],
           ),
