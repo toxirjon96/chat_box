@@ -6,6 +6,7 @@ import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
 import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
+import '../main_page/main_page.dart';
 import 'widget/custom_button.dart';
 import 'widget/otp_screen.dart';
 
@@ -29,30 +30,41 @@ class _SignInPageState extends State<SignInPage> {
     if (isValidPhoneNumber) {
       loading.value = true;
       final auth = FirebaseAuth.instance;
-
+      final phone = phoneController.text;
       await auth.verifyPhoneNumber(
-        phoneNumber: phoneController.text.trim().replaceAll(' ', ''),
+        phoneNumber: phone.trim().replaceAll(' ', ''),
         timeout: const Duration(seconds: 60),
         verificationCompleted: (PhoneAuthCredential credential) async {
           print('\n' * 5);
           print('verificationCompleted');
           print(credential.smsCode);
           print('\n' * 5);
-
-          await auth.signInWithCredential(credential).then((value) {
-            // context.router.push(const Main());
-          });
         },
         verificationFailed: (FirebaseAuthException e) {
           isError.value = true;
           errorMessage.value = 'Authentication failed!';
         },
-        codeSent: (String verificationId, int? resendToken) {
-          Navigator.of(context).push(
+        codeSent: (String verificationId, int? resendToken) async {
+          final result = await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => OtpScreen(verificationId: verificationId),
+              builder: (context) => OtpScreen(
+                verificationId: verificationId,
+                phoneNumber: phone,
+              ),
             ),
           );
+          if (result != null) {
+            if (context.mounted) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const MainPage(),
+                ),
+              );
+            }
+          }else{
+            isError.value = true;
+            errorMessage.value = 'Verification failed';
+          }
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           print('\n' * 5);

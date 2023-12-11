@@ -7,19 +7,19 @@ import '../../../../common/style/app_insets.dart';
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
     required this.verificationId,
+    required this.phoneNumber,
     super.key,
   });
 
   final String verificationId;
+  final String phoneNumber;
 
   @override
   State<StatefulWidget> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  String smsCode = '';
-
-  void otpVerification() async {
+  void otpVerification(String smsCode) async {
     final auth = FirebaseAuth.instance;
 
     final credential = PhoneAuthProvider.credential(
@@ -28,9 +28,8 @@ class _OtpScreenState extends State<OtpScreen> {
     );
     try {
       final result = await auth.signInWithCredential(credential);
-
       if (context.mounted) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(result);
       }
     } catch (e) {
       print(e);
@@ -49,6 +48,27 @@ class _OtpScreenState extends State<OtpScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                'Verification',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Enter the code sent to the number',
+                style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 16),
+              ),
+              const SizedBox(height: 40),
+              Text(
+                widget.phoneNumber,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+              const SizedBox(height: 40),
               Pinput(
                 length: 6,
                 defaultPinTheme: PinTheme(
@@ -96,9 +116,25 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 showCursor: true,
                 onCompleted: (pin) {
-                  smsCode = pin;
-                  print(smsCode);
+                  otpVerification(pin);
                 },
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Didn\'t receive code?',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'Resend',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
               ),
             ],
           ),
