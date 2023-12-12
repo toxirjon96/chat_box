@@ -25,8 +25,9 @@ class DependenciesScope extends InheritedWidget {
         'out_of_scope',
       );
 
-  static DependenciesScope of(BuildContext context, {bool listen = false}) =>
-      maybeOf(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType();
+  static Dependencies of(BuildContext context, {bool listen = false}) =>
+      maybeOf(context, listen: listen)?.dependencies ??
+      _notFoundInheritedWidgetOfExactType();
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
