@@ -36,7 +36,6 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   void dispose() {
-    FocusScope.of(context).unfocus();
     phoneController.dispose();
     super.dispose();
   }
