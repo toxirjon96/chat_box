@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
+import 'widget/user_container.dart';
 
 class MessagingPage extends StatelessWidget {
   const MessagingPage({
@@ -14,6 +15,7 @@ class MessagingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Stack(
       children: [
         Positioned(
@@ -48,6 +50,39 @@ class MessagingPage extends StatelessWidget {
                     ),
               ),
             ],
+          ),
+        ),
+        Positioned(
+          left: AppInsets.leftAndRightPadding,
+          right: 0,
+          top: 90,
+          height: 100,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              UsersContainer(),
+              UsersContainer(),
+              UsersContainer(),
+              UsersContainer(),
+              UsersContainer(),
+              UsersContainer(),
+              UsersContainer(),
+            ],
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          top: 200,
+          bottom: 0,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.background,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(50),
+                topRight: Radius.circular(50),
+              ),
+            ),
           ),
         ),
       ],
