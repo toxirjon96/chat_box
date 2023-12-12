@@ -8,6 +8,7 @@ import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
 import 'bloc/authorization_bloc.dart';
 import 'widget/custom_button.dart';
+import 'widget/otp_screen.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -46,6 +47,16 @@ class _SignInPageState extends State<SignInPage> {
       appBar: AppBar(),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (BuildContext context, AuthState state) {
+          if (state is Auth$SuccessState) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => OtpScreen(
+                  verificationId: state.verificationId,
+                  phoneNumber: phoneController.text,
+                ),
+              ),
+            );
+          }
           return SingleChildScrollView(
             child: Column(
               children: [
