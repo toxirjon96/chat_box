@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -6,9 +5,7 @@ import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
 import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
-import '../main_page/main_page.dart';
 import 'widget/custom_button.dart';
-import 'widget/otp_screen.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -21,58 +18,9 @@ class _SignInPageState extends State<SignInPage> {
   late final TextEditingController phoneController;
   final _formKey = GlobalKey<FormState>();
 
-  ValueNotifier<bool> loading = ValueNotifier(false);
-  ValueNotifier<bool> isError = ValueNotifier(false);
-  ValueNotifier<String> errorMessage = ValueNotifier('');
-
   Future<void> signIn() async {
     final isValidPhoneNumber = _formKey.currentState!.validate();
-    if (isValidPhoneNumber) {
-      loading.value = true;
-      final auth = FirebaseAuth.instance;
-      final phone = phoneController.text;
-      await auth.verifyPhoneNumber(
-        phoneNumber: phone.trim().replaceAll(' ', ''),
-        timeout: const Duration(seconds: 60),
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          print('\n' * 5);
-          print('verificationCompleted');
-          print(credential.smsCode);
-          print('\n' * 5);
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          isError.value = true;
-          errorMessage.value = 'Authentication failed!';
-        },
-        codeSent: (String verificationId, int? resendToken) async {
-          final result = await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => OtpScreen(
-                verificationId: verificationId,
-                phoneNumber: phone,
-              ),
-            ),
-          );
-          if (result != null) {
-            if (context.mounted) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const MainPage(),
-                ),
-              );
-            }
-          }else{
-            isError.value = true;
-            errorMessage.value = 'Verification failed';
-          }
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          print('\n' * 5);
-          print(verificationId);
-          print('\n' * 5);
-        },
-      );
-    }
+    if (isValidPhoneNumber) {}
   }
 
   @override

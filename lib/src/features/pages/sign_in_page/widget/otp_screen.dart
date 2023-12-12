@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
@@ -19,21 +18,9 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  void otpVerification(String smsCode) async {
-    final auth = FirebaseAuth.instance;
 
-    final credential = PhoneAuthProvider.credential(
-      verificationId: widget.verificationId,
-      smsCode: smsCode,
-    );
-    try {
-      final result = await auth.signInWithCredential(credential);
-      if (context.mounted) {
-        Navigator.of(context).pop(result);
-      }
-    } catch (e) {
-      print(e);
-    }
+  void otpVerification(String smsCode) async {
+
   }
 
   @override
