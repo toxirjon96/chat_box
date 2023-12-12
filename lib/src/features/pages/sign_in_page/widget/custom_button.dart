@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
   final double horizontalPadding;
   final double verticalPadding;
   final String text;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
