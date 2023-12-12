@@ -1,27 +1,56 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../../../common/style/app_insets.dart';
+import 'unreceived_code.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
     required this.verificationId,
     required this.phoneNumber,
+    this.seconds = 120,
     super.key,
   });
 
   final String verificationId;
   final String phoneNumber;
+  final int seconds;
 
   @override
   State<StatefulWidget> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  late final Timer _timer;
+  late ValueNotifier<int> _start;
 
-  void otpVerification(String smsCode) async {
-
+  @override
+  void initState() {
+    _start = ValueNotifier(widget.seconds);
+    _startTimer();
+    super.initState();
   }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    const period = Duration(seconds: 1);
+    _timer = Timer.periodic(period, (timer) {
+      if (_start.value == 0) {
+        _timer.cancel();
+      } else {
+        _start.value -= 1;
+      }
+    });
+  }
+
+  void otpVerification(String smsCode) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +64,28 @@ class _OtpScreenState extends State<OtpScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'Verification',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+              RichText(
+                text: TextSpan(
+                  text: 'SMS ',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                  children: [
+                    TextSpan(
+                      text: 'Verification',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                    )
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               Text(
-                'Enter the code sent to the number',
+                'A text message with a six digit verification code has been sent to your phone number',
+                maxLines: 2,
+                softWrap: true,
+                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.labelLarge!.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                     fontSize: 16),
@@ -61,44 +103,49 @@ class _OtpScreenState extends State<OtpScreen> {
                 defaultPinTheme: PinTheme(
                   width: 56,
                   height: 56,
-                  textStyle: const TextStyle(
+                  textStyle: TextStyle(
                     fontSize: 20,
-                    color: Color.fromRGBO(30, 60, 87, 1),
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w600,
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: const Color.fromRGBO(234, 239, 243, 1)),
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 focusedPinTheme: PinTheme(
                   width: 56,
                   height: 56,
-                  textStyle: const TextStyle(
+                  textStyle: TextStyle(
                     fontSize: 20,
-                    color: Color.fromRGBO(30, 60, 87, 1),
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w600,
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: const Color.fromRGBO(114, 178, 238, 1)),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 submittedPinTheme: PinTheme(
                   width: 56,
                   height: 56,
-                  textStyle: const TextStyle(
+                  textStyle: TextStyle(
                     fontSize: 20,
-                    color: Color.fromRGBO(30, 60, 87, 1),
+                    color: Theme.of(context).colorScheme.background,
                     fontWeight: FontWeight.w600,
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: const Color.fromRGBO(234, 239, 243, 1)),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     borderRadius: BorderRadius.circular(20),
-                    color: const Color.fromRGBO(234, 239, 243, 1),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onPrimaryContainer,
                   ),
                 ),
                 showCursor: true,
@@ -107,21 +154,27 @@ class _OtpScreenState extends State<OtpScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              Text(
-                'Didn\'t receive code?',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
+              ValueListenableBuilder(
+                valueListenable: _start,
+                builder: (ctx, value, child) {
+                  if (value == 0) {
+                    return UnreceivedCode(onPressed: () {});
+                  }
+                  String minutes = (value ~/ 60).toString().padLeft(2, '0');
+                  String seconds = (value % 60).toString().padLeft(2, '0');
+                  return Center(
+                    child: Text(
+                      'Resend code in $minutes:$seconds sec',
+                      maxLines: 2,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 16,
+                          ),
                     ),
-              ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Resend',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                ),
+                  );
+                },
               ),
             ],
           ),
