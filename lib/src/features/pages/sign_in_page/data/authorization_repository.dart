@@ -1,7 +1,7 @@
 import 'firebase_data_provider.dart';
 
 abstract interface class IAuthorizationRepository {
-  Future<String?> signInWithPhoneNumber(String phoneNumber);
+  Future<String> signInWithPhoneNumber(String phoneNumber);
 
   Future<void> otpSignIn({
     required String id,
@@ -22,6 +22,6 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
       );
 
   @override
-  Future<String?> signInWithPhoneNumber(String phoneNumber) =>
+  Future<String> signInWithPhoneNumber(String phoneNumber) =>
       firebaseDataProvider.signInWithPhoneNumber(phoneNumber);
 }

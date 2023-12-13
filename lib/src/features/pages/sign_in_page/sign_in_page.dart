@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+import '../../../common/style/app_colors.dart';
 import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
+import '../../dependencies/widget/dependencies_scope.dart';
 import '../home_page/widget/custom_divider.dart';
 import '../home_page/widget/svg_container.dart';
 import 'bloc/authorization_bloc.dart';
@@ -20,12 +22,13 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   late final TextEditingController phoneController;
   final _formKey = GlobalKey<FormState>();
+  late final AuthBloc bloc;
 
   void signIn() {
     final isValidPhoneNumber = _formKey.currentState!.validate();
     if (isValidPhoneNumber) {
       final phone = phoneController.text.replaceAll(' ', '');
-      context.read<AuthBloc>().add(Auth$SendSmsCodeEvent(phone));
+      bloc.add(Auth$SendSmsCodeEvent(phone));
     }
   }
 
@@ -33,35 +36,24 @@ class _SignInPageState extends State<SignInPage> {
   void initState() {
     super.initState();
     phoneController = TextEditingController();
+    bloc = AuthBloc(
+      repository: DependenciesScope.of(context).authorizationRepository,
+    );
   }
 
   @override
   void dispose() {
     phoneController.dispose();
+    bloc.close();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          print(
-              '-----------------------------${state.runtimeType}----------------------------------');
-          if (state is Auth$SuccessState) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => OtpScreen(
-                  verificationId: state.verificationId,
-                  phoneNumber: phoneController.text,
-                ),
-              ),
-            );
-          }
-        },
-        builder: (BuildContext context, AuthState state) {
-          return SingleChildScrollView(
+  Widget build(BuildContext context) => BlocProvider.value(
+        value: bloc,
+        child: Scaffold(
+          appBar: AppBar(),
+          body: SingleChildScrollView(
             child: Column(
               children: [
                 const SizedBox(height: 60),
@@ -159,33 +151,69 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                if (state is Auth$LoadingState)
-                  CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                if (state is Auth$ErrorState)
-                  Center(
-                    child: Text(
-                      state.message,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.error,
-                            fontSize: 16,
-                          ),
-                    ),
-                  ),
                 const SizedBox(height: 30),
                 CustomButton(
                   horizontalPadding: AppInsets.leftAndRightPadding,
-                  text: 'Sign in',
-                  onPressed: state is Auth$LoadingState ? null : signIn,
+                  onPressed: signIn,
+                  child: BlocListener<AuthBloc, AuthState>(
+                    bloc: bloc,
+                    listener: (BuildContext context, AuthState state) {
+                      if (state is Auth$SuccessState) {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => OtpScreen(
+                              verificationId: state.verificationId,
+                              phoneNumber: phoneController.text,
+                            ),
+                          ),
+                        );
+                      }
+                      if (state is Auth$ErrorState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              state.message,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: BlocBuilder<AuthBloc, AuthState>(
+                      bloc: bloc,
+                      builder: (context, state) {
+                        if (state is Auth$LoadingState) {
+                          return const SizedBox.square(
+                            dimension: 50,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: RepaintBoundary(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.lightMainColor,
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Text(
+                            'Sign in',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),
-          );
-        },
-      ),
-    );
-  }
+          ),
+        ),
+      );
 }

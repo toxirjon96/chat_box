@@ -73,11 +73,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(const Auth$LoadingState());
       final id = await _repository.signInWithPhoneNumber(event.phoneNumber);
-      if (id != null) {
-        emit(Auth$SuccessState(id));
-      } else {
-        emit(const Auth$ErrorState('Verification id did not come'));
-      }
+      emit(Auth$SuccessState(id));
     } on Object catch (error, stackTrace) {
       print(error);
       print(stackTrace);

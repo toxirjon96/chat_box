@@ -4,7 +4,7 @@ import '../../../../common/style/app_colors.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
-    required this.text,
+    required this.child,
     required this.onPressed,
     this.height = 60,
     this.horizontalPadding = 20,
@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
   final double height;
   final double horizontalPadding;
   final double verticalPadding;
-  final String text;
+  final Widget child;
   final void Function()? onPressed;
 
   @override
@@ -42,12 +42,7 @@ class CustomButton extends StatelessWidget {
         child: SizedBox.expand(
           child: TextButton(
             onPressed: onPressed,
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.background,
-                  ),
-            ),
+            child: child,
           ),
         ),
       ),

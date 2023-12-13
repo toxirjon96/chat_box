@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class IFirebaseDataProvider {
-  Future<String?> signInWithPhoneNumber(String phoneNumber);
+  Future<String> signInWithPhoneNumber(String phoneNumber);
 
   Future<void> otpSignIn({
     required String id,
@@ -26,7 +26,7 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
   }
 
   @override
-  Future<String?> signInWithPhoneNumber(String phoneNumber) async{
+  Future<String> signInWithPhoneNumber(String phoneNumber) async{
     String? id;
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -38,12 +38,13 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
         id = verificationId;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        print('------------------------2$verificationId-------------------------------');
-        id = verificationId;
+
       },
     );
-    print('------------------------3$id-------------------------------');
+    while (id == null) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
 
-    return id;
+    return id!;
   }
 }
