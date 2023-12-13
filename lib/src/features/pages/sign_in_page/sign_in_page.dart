@@ -45,8 +45,10 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<AuthBloc, AuthState>(
-        builder: (BuildContext context, AuthState state) {
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          print(
+              '-----------------------------${state.runtimeType}----------------------------------');
           if (state is Auth$SuccessState) {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -57,6 +59,8 @@ class _SignInPageState extends State<SignInPage> {
               ),
             );
           }
+        },
+        builder: (BuildContext context, AuthState state) {
           return SingleChildScrollView(
             child: Column(
               children: [

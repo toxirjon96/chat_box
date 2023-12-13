@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../../../common/style/app_insets.dart';
+import '../../main_page/main_page.dart';
 import '../bloc/authorization_bloc.dart';
 import 'unreceived_code.dart';
 
@@ -54,7 +55,16 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<AuthBloc, AuthState>(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is Auth$SignInSuccessState) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => const MainPage(),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is Auth$LoadingState) {
             return CircularProgressIndicator(

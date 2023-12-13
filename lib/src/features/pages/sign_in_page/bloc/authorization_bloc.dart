@@ -67,7 +67,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IAuthorizationRepository _repository;
 
   Future<void> _sendSmsCode(
-      Auth$SendSmsCodeEvent event, Emitter<AuthState> emit) async {
+    Auth$SendSmsCodeEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     try {
       emit(const Auth$LoadingState());
       final id = await _repository.signInWithPhoneNumber(event.phoneNumber);
@@ -83,7 +85,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _signIn(Auth$SignInEvent event, Emitter<AuthState> emit) async {
+  Future<void> _signIn(
+    Auth$SignInEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     try {
       emit(const Auth$LoadingState());
 

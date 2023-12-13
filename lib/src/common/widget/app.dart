@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/dependencies/model/dependencies.dart';
 import '../../features/dependencies/widget/dependencies_scope.dart';
-import '../../features/pages/main_page/main_page.dart';
 import '../../features/pages/sign_in_page/bloc/authorization_bloc.dart';
-import '../config/theme_config.dart';
 import '../../features/pages/home_page/home_page.dart';
+import '../config/theme_config.dart';
 
 class App extends StatelessWidget {
   const App({required this.dependencies, super.key});
@@ -27,7 +26,7 @@ class App extends StatelessWidget {
           title: 'Chat Box',
           theme: ThemeConfig.theme,
           debugShowCheckedModeBanner: false,
-          home: const MainPage(),
+          home: const HomePage(),
         ),
       ),
     );
