@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../common/style/app_colors.dart';
 
 class UserContainerPainter extends CustomPainter {
   const UserContainerPainter({
-    this.strokeWidth = 5.0,
+    this.strokeWidth = 3.0,
   });
 
   final double strokeWidth;
@@ -14,12 +16,25 @@ class UserContainerPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
     final paint = Paint()
-      ..color = AppColors.lightMainColor
+      ..color = AppColors.white
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
 
-    canvas.drawCircle(Offset(w / 2, h / 2), w / 2 - strokeWidth, paint);
+    canvas.drawArc(
+      Rect.fromPoints(Offset.zero, Offset(w, h)),
+      7 * pi / 4 + pi / 36,
+      pi / 2 - pi / 36,
+      false,
+      paint,
+    );
+    canvas.drawArc(
+      Rect.fromPoints(Offset.zero, Offset(w, h)),
+      pi / 2,
+      pi / 2 - pi / 36,
+      false,
+      paint,
+    );
   }
 
   @override
