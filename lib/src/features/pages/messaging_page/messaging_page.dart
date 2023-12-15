@@ -1,17 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
+import '../../dependencies/widget/dependencies_scope.dart';
+import '../sign_in_page/bloc/authorization_bloc.dart';
 import 'widget/user_container.dart';
 
-class MessagingPage extends StatelessWidget {
+class MessagingPage extends StatefulWidget {
   const MessagingPage({
     this.userImage,
     super.key,
   });
 
   final Image? userImage;
+
+  @override
+  State<MessagingPage> createState() => _MessagingPageState();
+}
+
+class _MessagingPageState extends State<MessagingPage> {
+  late final AuthBloc authBloc;
+
+  @override
+  void initState() {
+    authBloc = AuthBloc(
+      repository: DependenciesScope.of(context).authorizationRepository,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    authBloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +65,27 @@ class MessagingPage extends StatelessWidget {
                       color: Theme.of(context).colorScheme.background,
                     ),
               ),
-              CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                child: userImage ??
-                    Icon(
-                      Icons.person,
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    child: widget.userImage ??
+                        Icon(
+                          Icons.person,
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                  ),
+                  const SizedBox(width: 5),
+                  IconButton(
+                    onPressed: () {
+                      authBloc.add(const Auth$LogOutEvent());
+                    },
+                    icon: Icon(
+                      Icons.logout,
                       color: Theme.of(context).colorScheme.background,
                     ),
+                  ),
+                ],
               ),
             ],
           ),

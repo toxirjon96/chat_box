@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../data/authorization_repository.dart';
 
@@ -10,6 +11,10 @@ sealed class AuthEvent {
 final class Auth$SendSmsCodeEvent extends AuthEvent {
   const Auth$SendSmsCodeEvent(this.phoneNumber) : super._();
   final String phoneNumber;
+}
+
+final class Auth$LogOutEvent extends AuthEvent {
+  const Auth$LogOutEvent() : super._();
 }
 
 final class Auth$SignInEvent extends AuthEvent {
@@ -60,6 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (event, emit) => switch (event) {
         Auth$SendSmsCodeEvent event => _sendSmsCode(event, emit),
         Auth$SignInEvent event => _signIn(event, emit),
+        Auth$LogOutEvent() => _repository.logout(),
       },
     );
   }
@@ -74,6 +80,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const Auth$LoadingState());
       final id = await _repository.signInWithPhoneNumber(event.phoneNumber);
       emit(Auth$SuccessState(id));
+    } on FirebaseAuthException catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      emit(const Auth$ErrorState('Firebase auth exception'));
     } on Object catch (error, stackTrace) {
       print(error);
       print(stackTrace);
@@ -94,6 +104,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       emit(const Auth$SignInSuccessState());
+    } on FirebaseAuthException catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      emit(const Auth$ErrorState('Firebase auth exception'));
+    } on Object catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      emit(const Auth$ErrorState('Something went wrong'));
+    }
+  }
+
+  void logout() async {
+    try {
+      await _repository.logout();
+    } on FirebaseAuthException catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      emit(const Auth$ErrorState('Firebase auth exception'));
     } on Object catch (error, stackTrace) {
       print(error);
       print(stackTrace);

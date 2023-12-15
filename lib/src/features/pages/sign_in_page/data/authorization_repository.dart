@@ -11,6 +11,7 @@ abstract interface class IAuthorizationRepository {
     required String id,
     required String smsCode,
   });
+  Future<void> logout();
 
   Future<UserModel?> getUser();
 
@@ -82,4 +83,9 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
         fileName,
         videoByteData,
       );
+
+  @override
+  Future<void> logout() async {
+    firebaseDataProvider.logout();
+  }
 }

@@ -9,6 +9,7 @@ abstract interface class IFirebaseDataProvider {
     required String id,
     required String smsCode,
   });
+  Future<void> logout();
 
   Future<UserModel?> getUser();
 
@@ -84,5 +85,10 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
       await firebaseUser.updateDisplayName(displayName);
       await firebaseUser.updatePhotoURL(avatarImageUrl);
     }
+  }
+
+  @override
+  Future<void> logout() async{
+    await _firebaseAuth.signOut();
   }
 }
