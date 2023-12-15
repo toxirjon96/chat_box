@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../common/style/app_colors.dart';
+import '../../../../common/style/app_insets.dart';
 import '../../../dependencies/widget/dependencies_scope.dart';
 import '../../main_page/main_page.dart';
 import '../bloc/user_data_bloc/user_info_bloc.dart';
@@ -124,21 +125,27 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   valueListenable: userImageUrl,
                   builder: (context, value, child) {
                     return CircleAvatar(
-                      backgroundColor: AppColors.lightMainColor,
+                      backgroundColor: AppColors.white,
                       radius: 35,
                       child: GestureDetector(
                         onTap: showPickerDialog,
                         child: value != null
                             ? CachedNetworkImage(
                                 imageUrl: value,
+                                fit: BoxFit.cover,
                                 placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
+                                    const CircularProgressIndicator(
+                                  color: AppColors.white,
+                                ),
                                 errorWidget: (context, url, error) =>
                                     const Icon(Icons.error),
                               )
-                            : const Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: CircularProgressIndicator(),
+                            : Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Icon(
+                                  Icons.upload_file,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                               ),
                       ),
                     );
@@ -146,11 +153,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 ),
                 const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppInsets.leftAndRightPadding),
                   child: DecoratedBox(
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: AppColors.lightMainColor,
+                      color: AppColors.white,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -167,13 +175,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           }
                           return null;
                         },
-                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          errorMaxLines: 2,
                           hintText: 'Enter your name',
-                          border: InputBorder.none,
+                          labelText: 'Name',
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
                         ),
                       ),
                     ),
@@ -213,13 +221,21 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             padding: EdgeInsets.all(10.0),
                             child: RepaintBoundary(
                               child: CircularProgressIndicator(
-                                color: AppColors.lightMainColor,
+                                color: AppColors.white,
                               ),
                             ),
                           ),
                         );
                       } else {
-                        return const Text('Save');
+                        return Text(
+                          'Save',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.background,
+                              ),
+                        );
                       }
                     },
                   ),
