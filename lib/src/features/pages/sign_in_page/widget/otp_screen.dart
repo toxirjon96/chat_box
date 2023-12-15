@@ -6,9 +6,9 @@ import 'package:pinput/pinput.dart';
 import '../../../../common/style/app_colors.dart';
 import '../../../../common/style/app_insets.dart';
 import '../../../dependencies/widget/dependencies_scope.dart';
-import '../../main_page/main_page.dart';
 import '../bloc/authorization_bloc.dart';
 import 'unreceived_code.dart';
+import 'user_info_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
@@ -74,7 +74,7 @@ class _OtpScreenState extends State<OtpScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MainPage(),
+                builder: (context) => const UserInfoScreen(),
               ),
             );
           }
@@ -190,7 +190,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       onCompleted: (pin) {
                         bloc.add(
                           Auth$SignInEvent(
-                              id: widget.verificationId, smsCode: pin),
+                            id: widget.verificationId,
+                            smsCode: pin,
+                          ),
                         );
                       },
                     ),

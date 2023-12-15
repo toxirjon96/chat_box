@@ -59,7 +59,7 @@ class MessagingPage extends StatelessWidget {
           height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: [
+            children: const [
               UsersContainer(),
               UsersContainer(),
               UsersContainer(),

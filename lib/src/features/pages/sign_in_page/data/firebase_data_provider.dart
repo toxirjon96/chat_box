@@ -1,11 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../model/user_model.dart';
+
 abstract interface class IFirebaseDataProvider {
   Future<String> signInWithPhoneNumber(String phoneNumber);
 
   Future<void> otpSignIn({
     required String id,
     required String smsCode,
+  });
+
+  Future<UserModel?> getUser();
+
+  Future<void> updateUser({
+    required String displayName,
+    required String avatarImageUrl,
   });
 }
 
@@ -17,7 +26,7 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
   Future<void> otpSignIn({
     required String id,
     required String smsCode,
-  }) async{
+  }) async {
     final credential = PhoneAuthProvider.credential(
       verificationId: id,
       smsCode: smsCode,
@@ -26,7 +35,7 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
   }
 
   @override
-  Future<String> signInWithPhoneNumber(String phoneNumber) async{
+  Future<String> signInWithPhoneNumber(String phoneNumber) async {
     String? id;
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -34,17 +43,46 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
-        print('------------------------1$verificationId-------------------------------');
+        print(
+            '------------------------1$verificationId-------------------------------');
         id = verificationId;
       },
-      codeAutoRetrievalTimeout: (String verificationId) {
-
-      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
     while (id == null) {
       await Future.delayed(const Duration(milliseconds: 100));
     }
 
     return id!;
+  }
+
+  @override
+  Future<UserModel?> getUser() async {
+    final firebaseUser = _firebaseAuth.currentUser;
+
+    if (firebaseUser != null) {
+      final user = UserModel(
+        id: firebaseUser.uid,
+        displayName: firebaseUser.displayName,
+        avatarImage: firebaseUser.photoURL,
+      );
+
+      return user;
+    }
+
+    return null;
+  }
+
+  @override
+  Future<void> updateUser({
+    required String displayName,
+    required String avatarImageUrl,
+  }) async {
+    final firebaseUser = _firebaseAuth.currentUser;
+
+    if (firebaseUser != null) {
+      await firebaseUser.updateDisplayName(displayName);
+      await firebaseUser.updatePhotoURL(avatarImageUrl);
+    }
   }
 }

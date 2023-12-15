@@ -16,7 +16,7 @@ class UsersContainer extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondary,
             shape: BoxShape.circle,
           ),
-          child: CustomPaint(
+          child: const CustomPaint(
             painter: UserContainerPainter(),
           ),
         ),

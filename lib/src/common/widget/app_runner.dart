@@ -6,6 +6,7 @@ import '../../../firebase_options.dart';
 import '../../features/dependencies/model/dependencies.dart';
 import '../../features/pages/sign_in_page/data/authorization_repository.dart';
 import '../../features/pages/sign_in_page/data/firebase_data_provider.dart';
+import '../../features/pages/sign_in_page/data/firebase_storage_data_provider.dart';
 import '../widget/app.dart';
 
 class AppRunner {
@@ -19,8 +20,10 @@ class AppRunner {
     dependencies.sharedPreferences = await SharedPreferences.getInstance();
 
     dependencies.authorizationRepository = AuthorizationRepositoryImpl(
-      FireBaseDataProviderImpl(),
+      firebaseDataProvider: FireBaseDataProviderImpl(),
+      firebaseStorageDataProvider: FirebaseStorageDataProviderImpl(),
     );
+    
     App(
       dependencies: dependencies,
     ).run();
