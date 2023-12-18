@@ -9,6 +9,7 @@ import '../../../common/style/app_insets.dart';
 import '../../dependencies/widget/dependencies_scope.dart';
 import '../sign_in_page/bloc/authorization_bloc.dart';
 import 'widget/user_container.dart';
+import 'widget/user_message_container.dart';
 
 class MessagingPage extends StatefulWidget {
   const MessagingPage({
@@ -72,13 +73,14 @@ class _MessagingPageState extends State<MessagingPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(45),
                       child: CachedNetworkImage(
-                        imageUrl: user?.photoURL??'',
+                        imageUrl: user?.photoURL ?? '',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => const CircularProgressIndicator(
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(
                           color: AppColors.white,
                         ),
                         errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                            const Icon(Icons.person),
                       ),
                     ),
                   ),
@@ -126,6 +128,18 @@ class _MessagingPageState extends State<MessagingPage> {
                 topLeft: Radius.circular(50),
                 topRight: Radius.circular(50),
               ),
+            ),
+            child: ListView(
+              children: [
+                UserMessageContainer(
+                  imageUrl: user?.photoURL?? '',
+                  userName: user?.displayName??'',
+                  lastMessageText: 'How are you today',
+                  messageCount: 3,
+                  isSeen: true,
+                  sentTime: DateTime.now(),
+                ),
+              ],
             ),
           ),
         ),
