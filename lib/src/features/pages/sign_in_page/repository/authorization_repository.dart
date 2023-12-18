@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 
+import '../../../../common/data_provider/fire_store_data_provider.dart';
 import '../model/user_model.dart';
-import 'firebase_data_provider.dart';
-import 'firebase_storage_data_provider.dart';
+import '../../../../common/data_provider/firebase_data_provider.dart';
+import '../../../../common/data_provider/firebase_storage_data_provider.dart';
 
 abstract interface class IAuthorizationRepository {
   Future<String> signInWithPhoneNumber(String phoneNumber);
@@ -11,6 +12,7 @@ abstract interface class IAuthorizationRepository {
     required String id,
     required String smsCode,
   });
+
   Future<void> logout();
 
   Future<UserModel?> getUser();
@@ -35,10 +37,12 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
   const AuthorizationRepositoryImpl({
     required this.firebaseDataProvider,
     required this.firebaseStorageDataProvider,
+    required this.fireStoreDataProvider,
   });
 
   final IFirebaseDataProvider firebaseDataProvider;
   final IFirebaseStorageDataProvider firebaseStorageDataProvider;
+  final IFireStoreDataProvider fireStoreDataProvider;
 
   @override
   Future<void> otpSignIn({required String id, required String smsCode}) =>
@@ -58,11 +62,15 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
   Future<void> updateUser({
     required String displayName,
     required String avatarImageUrl,
-  }) =>
-      firebaseDataProvider.updateUser(
-        displayName: displayName,
-        avatarImageUrl: avatarImageUrl,
-      );
+  }) async {
+    await firebaseDataProvider.updateUser(
+      displayName: displayName,
+      avatarImageUrl: avatarImageUrl,
+    );
+    final user = await firebaseDataProvider.getUser();
+
+    if (user != null) await fireStoreDataProvider.storeUserData(user);
+  }
 
   @override
   Future<String> uploadImage({

@@ -4,9 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../firebase_options.dart';
 import '../../features/dependencies/model/dependencies.dart';
-import '../../features/pages/sign_in_page/data/authorization_repository.dart';
-import '../../features/pages/sign_in_page/data/firebase_data_provider.dart';
-import '../../features/pages/sign_in_page/data/firebase_storage_data_provider.dart';
+import '../../features/pages/sign_in_page/repository/authorization_repository.dart';
+import '../data_provider/fire_store_data_provider.dart';
+import '../data_provider/firebase_data_provider.dart';
+import '../data_provider/firebase_storage_data_provider.dart';
 import '../widget/app.dart';
 
 class AppRunner {
@@ -22,8 +23,9 @@ class AppRunner {
     dependencies.authorizationRepository = AuthorizationRepositoryImpl(
       firebaseDataProvider: FireBaseDataProviderImpl(),
       firebaseStorageDataProvider: FirebaseStorageDataProviderImpl(),
+      fireStoreDataProvider: FireStoreDataProviderImpl(),
     );
-    
+
     App(
       dependencies: dependencies,
     ).run();

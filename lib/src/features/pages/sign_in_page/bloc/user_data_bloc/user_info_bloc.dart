@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../common/util/logger.dart';
-import '../../data/authorization_repository.dart';
+import '../../repository/authorization_repository.dart';
 
 
 part 'user_info_event.dart';

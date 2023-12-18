@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../../../../common/util/custom_exception.dart';
-import '../../../../common/util/logger.dart';
+import '../util/custom_exception.dart';
+import '../util/logger.dart';
 
 abstract interface class IFirebaseStorageDataProvider {
   Future<String> storeImage(String fileName, Uint8List imageByteData);

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../pages/sign_in_page/data/authorization_repository.dart';
+import '../../pages/sign_in_page/repository/authorization_repository.dart';
 
 base class Dependencies {
   Dependencies();

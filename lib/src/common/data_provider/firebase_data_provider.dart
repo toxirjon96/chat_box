@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../model/user_model.dart';
+import '../../features/pages/sign_in_page/model/user_model.dart';
 
 abstract interface class IFirebaseDataProvider {
   Future<String> signInWithPhoneNumber(String phoneNumber);
@@ -9,6 +9,7 @@ abstract interface class IFirebaseDataProvider {
     required String id,
     required String smsCode,
   });
+
   Future<void> logout();
 
   Future<UserModel?> getUser();
@@ -44,8 +45,6 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
-        print(
-            '------------------------1$verificationId-------------------------------');
         id = verificationId;
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -66,6 +65,7 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
         id: firebaseUser.uid,
         displayName: firebaseUser.displayName,
         avatarImage: firebaseUser.photoURL,
+        phoneNumber: firebaseUser.phoneNumber,
       );
 
       return user;
@@ -88,7 +88,7 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
   }
 
   @override
-  Future<void> logout() async{
+  Future<void> logout() async {
     await _firebaseAuth.signOut();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../data/authorization_repository.dart';
+import '../repository/authorization_repository.dart';
 
 /// Events
 sealed class AuthEvent {
