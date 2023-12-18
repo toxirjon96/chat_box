@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../common/style/app_colors.dart';
@@ -24,7 +23,6 @@ class UserMessageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
     return Column(
       children: [
         ListTile(
@@ -32,7 +30,7 @@ class UserMessageContainer extends StatelessWidget {
             height: 60,
             width: 60,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(60),
+              borderRadius: BorderRadius.circular(30),
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.cover,

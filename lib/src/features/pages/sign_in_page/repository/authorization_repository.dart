@@ -67,6 +67,7 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
       displayName: displayName,
       avatarImageUrl: avatarImageUrl,
     );
+
     final user = await firebaseDataProvider.getUser();
 
     if (user != null) await fireStoreDataProvider.storeUserData(user);

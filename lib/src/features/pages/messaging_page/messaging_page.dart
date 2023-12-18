@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -8,6 +7,7 @@ import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
 import '../../dependencies/widget/dependencies_scope.dart';
 import '../sign_in_page/bloc/authorization_bloc.dart';
+import '../sign_in_page/model/user_model.dart';
 import 'widget/user_container.dart';
 import 'widget/user_message_container.dart';
 
@@ -22,6 +22,7 @@ class MessagingPage extends StatefulWidget {
 
 class _MessagingPageState extends State<MessagingPage> {
   late final AuthBloc authBloc;
+  late final UserModel? user;
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _MessagingPageState extends State<MessagingPage> {
     super.initState();
   }
 
+
   @override
   void dispose() {
     authBloc.close();
@@ -39,7 +41,6 @@ class _MessagingPageState extends State<MessagingPage> {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
     return Stack(
       children: [
         Positioned(
@@ -73,7 +74,7 @@ class _MessagingPageState extends State<MessagingPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(45),
                       child: CachedNetworkImage(
-                        imageUrl: user?.photoURL ?? '',
+                        imageUrl: user?.avatarImage ?? '',
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(
@@ -108,7 +109,7 @@ class _MessagingPageState extends State<MessagingPage> {
             scrollDirection: Axis.horizontal,
             children: [
               UsersContainer(
-                imageUrl: user != null ? user.photoURL ?? '' : '',
+                imageUrl: user?.avatarImage ?? '',
                 selfContainer: true,
                 selfTopColor: AppColors.white,
                 borderColor: Colors.white38,
@@ -132,8 +133,8 @@ class _MessagingPageState extends State<MessagingPage> {
             child: ListView(
               children: [
                 UserMessageContainer(
-                  imageUrl: user?.photoURL?? '',
-                  userName: user?.displayName??'',
+                  imageUrl: user?.avatarImage ?? '',
+                  userName: user?.displayName ?? '',
                   lastMessageText: 'How are you today',
                   messageCount: 3,
                   isSeen: true,
