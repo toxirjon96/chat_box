@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../common/style/app_colors.dart';
 import '../../../common/style/app_icons.dart';
 import '../../../common/style/app_insets.dart';
 import '../../dependencies/widget/dependencies_scope.dart';
@@ -10,11 +12,8 @@ import 'widget/user_container.dart';
 
 class MessagingPage extends StatefulWidget {
   const MessagingPage({
-    this.userImage,
     super.key,
   });
-
-  final Image? userImage;
 
   @override
   State<MessagingPage> createState() => _MessagingPageState();
@@ -39,7 +38,7 @@ class _MessagingPageState extends State<MessagingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    User? user = FirebaseAuth.instance.currentUser;
     return Stack(
       children: [
         Positioned(
@@ -67,13 +66,21 @@ class _MessagingPageState extends State<MessagingPage> {
               ),
               Row(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    child: widget.userImage ??
-                        Icon(
-                          Icons.person,
-                          color: Theme.of(context).colorScheme.background,
+                  SizedBox(
+                    height: 45,
+                    width: 45,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(45),
+                      child: CachedNetworkImage(
+                        imageUrl: user?.photoURL??'',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const CircularProgressIndicator(
+                          color: AppColors.white,
                         ),
+                        errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 5),
                   IconButton(
@@ -97,14 +104,13 @@ class _MessagingPageState extends State<MessagingPage> {
           height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: const [
-              UsersContainer(),
-              UsersContainer(),
-              UsersContainer(),
-              UsersContainer(),
-              UsersContainer(),
-              UsersContainer(),
-              UsersContainer(),
+            children: [
+              UsersContainer(
+                imageUrl: user != null ? user.photoURL ?? '' : '',
+                selfContainer: true,
+                selfTopColor: AppColors.white,
+                borderColor: Colors.white38,
+              ),
             ],
           ),
         ),
