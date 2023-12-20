@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../../../../common/data_provider/database_data_provider.dart';
 import '../../../../common/data_provider/fire_store_data_provider.dart';
 import '../model/user_model.dart';
 import '../../../../common/data_provider/firebase_data_provider.dart';
@@ -31,6 +32,7 @@ abstract interface class IAuthorizationRepository {
     required String fileName,
     required Uint8List videoByteData,
   });
+  Future<List<UserModel>> getUsers();
 }
 
 class AuthorizationRepositoryImpl implements IAuthorizationRepository {
@@ -38,11 +40,13 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
     required this.firebaseDataProvider,
     required this.firebaseStorageDataProvider,
     required this.fireStoreDataProvider,
+    required this.databaseDataProvider,
   });
 
   final IFirebaseDataProvider firebaseDataProvider;
   final IFirebaseStorageDataProvider firebaseStorageDataProvider;
   final IFireStoreDataProvider fireStoreDataProvider;
+  final IDatabaseDataProvider databaseDataProvider;
 
   @override
   Future<void> otpSignIn({required String id, required String smsCode}) =>
@@ -70,7 +74,10 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
 
     final user = await firebaseDataProvider.getUser();
 
-    if (user != null) await fireStoreDataProvider.storeUserData(user);
+    if (user != null){
+      await fireStoreDataProvider.storeUserData(user);
+      await databaseDataProvider.saveUser(user);
+    }
   }
 
   @override
@@ -97,4 +104,7 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
   Future<void> logout() async {
     firebaseDataProvider.logout();
   }
+
+  @override
+  Future<List<UserModel>> getUsers() => fireStoreDataProvider.getUsers();
 }
