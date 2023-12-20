@@ -101,15 +101,20 @@ class _MessagingPageState extends State<MessagingPage> {
                       ),
                     ),
                     const SizedBox(width: 5),
-                    IconButton(
-                      onPressed: () {
-                        authBloc.add(const Auth$LogOutEvent());
+                    BlocBuilder<AuthBloc, AuthState>(
+                      bloc: authBloc,
+                      builder: (BuildContext context, AuthState state) {
+                        return IconButton(
+                          onPressed: () {
+                            authBloc.add(const Auth$LogOutEvent());
+                          },
+                          icon: Icon(
+                            Icons.logout,
+                            color: Theme.of(context).colorScheme.background,
+                          ),
+                        );
                       },
-                      icon: Icon(
-                        Icons.logout,
-                        color: Theme.of(context).colorScheme.background,
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ],
@@ -126,13 +131,14 @@ class _MessagingPageState extends State<MessagingPage> {
                 child: Positioned(
                   left: AppInsets.leftAndRightPadding,
                   right: 0,
-                  top: 90,
+                  top: 110,
                   height: 100,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
                       UsersContainer(
                         imageUrl: widget.user?.avatarImage ?? '',
+                        userName: 'Me',
                         selfContainer: true,
                         selfTopColor: AppColors.white,
                         borderColor: Colors.white38,
@@ -140,6 +146,7 @@ class _MessagingPageState extends State<MessagingPage> {
                       ...value.users.map<Widget>((user) {
                         if (user.id != widget.user!.id) {
                           return UsersContainer(
+                            userName: user.displayName!,
                             imageUrl: user.avatarImage ?? '',
                             selfContainer: false,
                             selfTopColor: AppColors.white,
@@ -159,7 +166,7 @@ class _MessagingPageState extends State<MessagingPage> {
           Positioned(
             left: 0,
             right: 0,
-            top: 200,
+            top: 220,
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(

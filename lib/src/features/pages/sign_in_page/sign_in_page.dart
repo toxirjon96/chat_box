@@ -202,9 +202,9 @@ class _SignInPageState extends State<SignInPage> {
                                 .textTheme
                                 .titleLarge!
                                 .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.background,
-                                ),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
                           );
                         }
                       },
