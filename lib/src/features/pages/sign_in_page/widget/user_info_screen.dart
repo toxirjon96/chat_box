@@ -21,7 +21,7 @@ class UserInfoScreen extends StatefulWidget {
 class _UserInfoScreenState extends State<UserInfoScreen> {
   late final TextEditingController nameController;
   final _formKey = GlobalKey<FormState>();
-  ValueNotifier<String?> userImageUrl = ValueNotifier(null);
+  String? imageUrl;
 
   late final UserInfoBloc bloc;
 
@@ -74,13 +74,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   }
 
   void saveData() {
-    if (userImageUrl.value != null) {
+    if (imageUrl != null) {
       final isValid = _formKey.currentState!.validate();
       if (isValid) {
         bloc.add(
           UserInfoEvent.save(
-            displayName: nameController.text,
-            avatarImageUrl: userImageUrl.value!,
+            displayName: nameController.text.trim(),
+            avatarImageUrl: imageUrl!,
           ),
         );
       }
@@ -121,32 +121,65 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ValueListenableBuilder(
-                  valueListenable: userImageUrl,
-                  builder: (context, value, child) {
-                    return CircleAvatar(
-                      backgroundColor: AppColors.white,
-                      radius: 35,
-                      child: GestureDetector(
-                        onTap: showPickerDialog,
-                        child: value != null
-                            ? CachedNetworkImage(
-                                imageUrl: value,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(
-                                  color: AppColors.white,
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Icon(
-                                  Icons.upload_file,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
+                Text(
+                  'Welcome To Chat Box',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppInsets.leftAndRightPadding,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Please select your image*',
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.w400,
+                          ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                BlocBuilder<UserInfoBloc, UserInfoState>(
+                  bloc: bloc,
+                  builder: (BuildContext context, UserInfoState state) {
+                    return Container(
+                      height: 90,
+                      width: 90,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.lightMainColor,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(45),
+                        child: SizedBox.expand(
+                          child: GestureDetector(
+                            onTap: showPickerDialog,
+                            child: imageUrl != null
+                                ? CachedNetworkImage(
+                                  imageUrl: imageUrl!,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(
+                                    color: AppColors.white,
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                )
+                                : Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(
+                                      Icons.upload_file,
+                                      color:
+                                          Theme.of(context).colorScheme.background,
+                                    ),
+                                  ),
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -194,7 +227,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     bloc: bloc,
                     listener: (context, state) {
                       if (state is ImageUploadedUserState) {
-                        userImageUrl.value = state.imageUrl;
+                        imageUrl = state.imageUrl;
                       }
                       if (state is SaveUserInfoState) {
                         Navigator.of(context).push(
