@@ -11,7 +11,7 @@ sealed class UserInfoState {
 
   const factory UserInfoState.imageUploaded(String imageUrl) = ImageUploadedUserState;
 
-  const factory UserInfoState.saved() = SaveUserInfoState;
+  const factory UserInfoState.saved(UserModel? user) = SaveUserInfoState;
 }
 
 final class InitialUserState extends UserInfoState {
@@ -35,5 +35,6 @@ final class ImageUploadedUserState extends UserInfoState {
 }
 
 final class SaveUserInfoState extends UserInfoState {
-  const SaveUserInfoState() : super._();
+  const SaveUserInfoState(this.user) : super._();
+  final UserModel? user;
 }

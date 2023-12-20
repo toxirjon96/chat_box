@@ -54,7 +54,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
       while (user == null) {
         Future.delayed(const Duration(milliseconds: 100));
       }
-      emit(const UserInfoState.saved());
+      emit(UserInfoState.saved(user));
     } catch (error, stackTrace) {
       fatal(error, stackTrace);
       emit(const UserInfoState.error('Something went wrong'));

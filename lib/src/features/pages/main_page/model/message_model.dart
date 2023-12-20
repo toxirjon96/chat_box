@@ -9,21 +9,22 @@ class SendMessageModel {
   final String userId;
   final String createdAt;
 
-  factory SendMessageModel.fromJson(Map<String, Object?> json) => SendMessageModel(
-    message: (json['message'] as String?)!,
-    userId: (json['user_id'] as String?)!,
-    createdAt: (json['created_at'] as String?)!,
-  );
+  factory SendMessageModel.fromJson(Map<String, Object?> json) =>
+      SendMessageModel(
+        message: (json['message'] as String?)!,
+        userId: (json['user_id'] as String?)!,
+        createdAt: (json['created_at'] as String?)!,
+      );
 
   Map<String, Object?> toJson() => {
-    'message': message,
-    'user_id': userId,
-    'created_at': createdAt,
-  };
+        'message': message,
+        'user_id': userId,
+        'created_at': createdAt,
+      };
 }
 
-class RecieveMessageModel {
-  const RecieveMessageModel({
+class ReceiveMessageModel {
+  const ReceiveMessageModel({
     required this.message,
     required this.isItMe,
     required this.createdAt,
@@ -33,15 +34,16 @@ class RecieveMessageModel {
   final bool isItMe;
   final DateTime createdAt;
 
-  factory RecieveMessageModel.fromJson(Map<String, Object?> json) => RecieveMessageModel(
-    message: (json['message'] as String?)!,
-    isItMe: (json['is_it_me'] as bool?)!,
-    createdAt: DateTime.parse((json['created_at'] as String?)!),
-  );
+  factory ReceiveMessageModel.fromJson(Map<String, Object?> json) =>
+      ReceiveMessageModel(
+        message: (json['message'] as String?)!,
+        isItMe: (json['is_it_me'] as bool?)!,
+        createdAt: DateTime.parse((json['created_at'] as String?)!),
+      );
 
   Map<String, Object?> toJson() => {
-    'message': message,
-    'is_it_me': isItMe,
-    'created_at': createdAt.toUtc().toIso8601String(),
-  };
+        'message': message,
+        'is_it_me': isItMe,
+        'created_at': createdAt.toUtc().toIso8601String(),
+      };
 }

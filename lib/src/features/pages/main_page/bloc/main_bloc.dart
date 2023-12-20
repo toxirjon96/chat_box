@@ -32,7 +32,7 @@ sealed class MainState with _$MainState {
 
   const factory MainState.usersData(List<UserModel> users) = UsersDataMainState;
 
-  const factory MainState.messages(List<RecieveMessageModel> messages) = MessagesMainState;
+  const factory MainState.messages(List<ReceiveMessageModel> messages) = MessagesMainState;
 }
 
 /// BLoC

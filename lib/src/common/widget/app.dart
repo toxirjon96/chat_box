@@ -5,6 +5,7 @@ import '../../features/dependencies/model/dependencies.dart';
 import '../../features/dependencies/widget/dependencies_scope.dart';
 import '../../features/pages/home_page/home_page.dart';
 import '../../features/pages/main_page/main_page.dart';
+import '../../features/pages/sign_in_page/model/user_model.dart';
 import '../config/theme_config.dart';
 
 class App extends StatelessWidget {
@@ -29,7 +30,15 @@ class App extends StatelessWidget {
               return const CircularProgressIndicator();
             }
             if (snapshot.hasData) {
-              return const MainPage();
+              UserModel user = UserModel(
+                id: snapshot.data!.uid,
+                displayName: snapshot.data!.displayName,
+                avatarImage: snapshot.data!.photoURL,
+                phoneNumber: snapshot.data!.phoneNumber,
+              );
+              return MainPage(
+                user: user,
+              );
             }
             return const HomePage();
           },

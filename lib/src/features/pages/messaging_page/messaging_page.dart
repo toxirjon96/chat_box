@@ -14,7 +14,9 @@ import 'widget/user_message_container.dart';
 class MessagingPage extends StatefulWidget {
   const MessagingPage({
     super.key,
+    required this.user,
   });
+  final UserModel? user;
 
   @override
   State<MessagingPage> createState() => _MessagingPageState();
@@ -22,7 +24,6 @@ class MessagingPage extends StatefulWidget {
 
 class _MessagingPageState extends State<MessagingPage> {
   late final AuthBloc authBloc;
-  late final UserModel? user;
 
   @override
   void initState() {
@@ -74,7 +75,7 @@ class _MessagingPageState extends State<MessagingPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(45),
                       child: CachedNetworkImage(
-                        imageUrl: user?.avatarImage ?? '',
+                        imageUrl: widget.user?.avatarImage ?? '',
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(
@@ -109,7 +110,7 @@ class _MessagingPageState extends State<MessagingPage> {
             scrollDirection: Axis.horizontal,
             children: [
               UsersContainer(
-                imageUrl: user?.avatarImage ?? '',
+                imageUrl: widget.user?.avatarImage ?? '',
                 selfContainer: true,
                 selfTopColor: AppColors.white,
                 borderColor: Colors.white38,
@@ -133,8 +134,8 @@ class _MessagingPageState extends State<MessagingPage> {
             child: ListView(
               children: [
                 UserMessageContainer(
-                  imageUrl: user?.avatarImage ?? '',
-                  userName: user?.displayName ?? '',
+                  imageUrl: widget.user?.avatarImage ?? '',
+                  userName: widget.user?.displayName ?? '',
                   lastMessageText: 'How are you today',
                   messageCount: 3,
                   isSeen: true,

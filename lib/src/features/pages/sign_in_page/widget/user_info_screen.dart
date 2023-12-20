@@ -199,7 +199,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       if (state is SaveUserInfoState) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (ctx) => const MainPage(),
+                            builder: (ctx) => MainPage(
+                              user: state.user,
+                            ),
                           ),
                         );
                       }

@@ -3,14 +3,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/style/app_colors.dart';
 import '../../../common/style/app_icons.dart';
+import '../../dependencies/widget/dependencies_scope.dart';
 import '../contacts_page/contacts_page.dart';
 import '../messaging_page/messaging_page.dart';
 import '../settings_page/settings_page.dart';
+import '../sign_in_page/model/user_model.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({
+    required this.user,
     super.key,
   });
+  final UserModel? user;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -52,10 +56,12 @@ class _MainPageState extends State<MainPage> {
         child: PageView(
           controller: controller,
           physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            MessagingPage(),
-            ContactsPage(),
-            SettingsPage(),
+          children: [
+            MessagingPage(
+              user: widget.user,
+            ),
+            const ContactsPage(),
+            const SettingsPage(),
           ],
         ),
       ),
@@ -65,13 +71,13 @@ class _MainPageState extends State<MainPage> {
           onTap: changePage,
           currentIndex: value,
           backgroundColor: Theme.of(context).colorScheme.background,
-          unselectedLabelStyle:
-              Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                fontSize: 14
-                  ),
+          unselectedLabelStyle: Theme.of(context)
+              .textTheme
+              .labelMedium!
+              .copyWith(
+                  color: Theme.of(context).colorScheme.secondary, fontSize: 14),
           selectedLabelStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-            fontSize: 14,
+                fontSize: 14,
                 color: Theme.of(context).colorScheme.primary,
               ),
           items: [
