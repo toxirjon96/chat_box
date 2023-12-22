@@ -101,7 +101,7 @@ class _MessagingPageState extends State<MessagingPage> {
                       ),
                     ),
                     const SizedBox(width: 5),
-                    BlocBuilder<AuthBloc, AuthState>(
+                    BlocConsumer<AuthBloc, AuthState>(
                       bloc: authBloc,
                       builder: (BuildContext context, AuthState state) {
                         return IconButton(
@@ -113,6 +113,11 @@ class _MessagingPageState extends State<MessagingPage> {
                             color: Theme.of(context).colorScheme.background,
                           ),
                         );
+                      },
+                      listener: (context, state) {
+                        if (state is Auth$LogoutState) {
+
+                        }
                       },
                     )
                   ],

@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../../../common/data_provider/database_data_provider.dart';
 import '../../../../common/data_provider/fire_store_data_provider.dart';
 import '../model/user_model.dart';
@@ -33,6 +35,7 @@ abstract interface class IAuthorizationRepository {
     required Uint8List videoByteData,
   });
   Future<List<UserModel>> getUsers();
+
 }
 
 class AuthorizationRepositoryImpl implements IAuthorizationRepository {
@@ -107,4 +110,5 @@ class AuthorizationRepositoryImpl implements IAuthorizationRepository {
 
   @override
   Future<List<UserModel>> getUsers() => fireStoreDataProvider.getUsers();
+
 }

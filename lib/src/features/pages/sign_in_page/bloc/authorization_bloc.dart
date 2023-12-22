@@ -56,6 +56,10 @@ final class Auth$SignInSuccessState extends AuthState {
   const Auth$SignInSuccessState() : super._();
 }
 
+final class Auth$LogoutState extends AuthState {
+  const Auth$LogoutState() : super._();
+}
+
 /// BLoC
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required IAuthorizationRepository repository})
@@ -65,7 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (event, emit) => switch (event) {
         Auth$SendSmsCodeEvent event => _sendSmsCode(event, emit),
         Auth$SignInEvent event => _signIn(event, emit),
-        Auth$LogOutEvent() => _repository.logout(),
+        Auth$LogOutEvent event => _logout(event, emit),
       },
     );
   }
@@ -115,9 +119,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void logout() async {
+  void _logout(
+    Auth$LogOutEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     try {
       await _repository.logout();
+      emit(const Auth$LogoutState());
     } on FirebaseAuthException catch (error, stackTrace) {
       print(error);
       print(stackTrace);

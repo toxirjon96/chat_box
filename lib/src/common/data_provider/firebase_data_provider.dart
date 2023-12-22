@@ -24,6 +24,8 @@ class FireBaseDataProviderImpl implements IFirebaseDataProvider {
   FireBaseDataProviderImpl() : _firebaseAuth = FirebaseAuth.instance;
   final FirebaseAuth _firebaseAuth;
 
+  FirebaseAuth get auth => _firebaseAuth;
+
   @override
   Future<void> otpSignIn({
     required String id,

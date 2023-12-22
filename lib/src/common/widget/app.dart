@@ -24,7 +24,7 @@ class App extends StatelessWidget {
         theme: ThemeConfig.theme,
         debugShowCheckedModeBanner: false,
         home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
+          stream: FirebaseAuth.instance.userChanges(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
